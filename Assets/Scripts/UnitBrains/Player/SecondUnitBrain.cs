@@ -11,16 +11,26 @@ namespace UnitBrains.Player
         private const float OverheatCooldown = 2f;
         private float _temperature = 0f;
         private float _cooldownTime = 0f;
+        
         private bool _overheated;
         
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
             float overheatTemperature = OverheatTemperature;
+            int currentTemperature = GetTemperature(); //тут мы получили текущую темпиратуру
+
+            if (currentTemperature >= overheatTemperature) return; //темпиратура больше или равна темпиратуре перегрева, значит выходим из метода
+
             ///////////////////////////////////////
             // Homework 1.3 (1st block, 3rd module)
             ///////////////////////////////////////           
-            var projectile = CreateProjectile(forTarget);
-            AddProjectileToList(projectile, intoList);
+            for (int i = 0; i <= currentTemperature; i++)
+            {
+                var projectile = CreateProjectile(forTarget);
+                AddProjectileToList(projectile, intoList);
+            }
+            
+            IncreaseTemperature(); // повышаем темпиратуру
             ///////////////////////////////////////
         }
 
@@ -67,7 +77,7 @@ namespace UnitBrains.Player
         private void IncreaseTemperature()
         {
             _temperature += 1f;
-            if (_temperature >= OverheatTemperature) _overheated = true;
+            if (_temperature >= OverheatTemperature) _overheated = true; 
         }
     }
 }
